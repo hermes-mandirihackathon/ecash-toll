@@ -1,17 +1,20 @@
 package com.mandiriecash.ecashtoll;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Toast;
 
-public class MainMenuActivity extends AppCompatActivity {
-    static final int CREATE_VEHICLE_ACTIVITY = 1;
+import com.mandiriecash.ecashtoll.dummy.ListVehicleContent;
+import com.mandiriecash.ecashtoll.dummy.LogActivityContent;
+
+public class MainMenuActivity extends AppCompatActivity implements VehicleFragment.OnListFragmentInteractionListener, LogActivityFragment.OnListFragmentInteractionListener{
+    public static final int CREATE_VEHICLE_ACTIVITY = 1;
+    MainMenuPagerAdapter mMainMenuPagerAdapter;
+    ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,16 +23,34 @@ public class MainMenuActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { startCreateVehicleActivity(); }
-        });
+        mMainMenuPagerAdapter = new MainMenuPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mMainMenuPagerAdapter);
+
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            System.out.println(savedInstanceState.getInt("fid"));
+            mViewPager.setCurrentItem(savedInstanceState.getInt("fid"));
+        }
+
+
+//TODO hapus diganti di fragment
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) { startCreateVehicleActivity(); }
+//        });
     }
 
-    public void startCreateVehicleActivity(){
-        Intent intent = new Intent(this,CreateVehicleActivity.class);
-        startActivityForResult(intent,CREATE_VEHICLE_ACTIVITY);
+//    public void startCreateVehicleActivity(){
+//        Intent intent = new Intent(this,CreateVehicleActivity.class);
+//        startActivityForResult(intent,CREATE_VEHICLE_ACTIVITY);
+//    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("fid",mViewPager.getCurrentItem());
     }
 
     @Override
@@ -39,5 +60,15 @@ public class MainMenuActivity extends AppCompatActivity {
                 Toast.makeText(this,"TODO tambah kendaraan",Toast.LENGTH_LONG);
             }
         }
+    }
+
+    @Override
+    public void onListFragmentInteraction(ListVehicleContent.Vehicle item) {
+        //TODO impl
+    }
+
+    @Override
+    public void onListFragmentInteraction(LogActivityContent.LogActivity item) {
+        //TODO impl
     }
 }

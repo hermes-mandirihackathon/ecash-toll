@@ -36,7 +36,11 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
+        holder.mVehicleName.setText(mValues.get(position).vehicleName);
+        String sourceDest = mValues.get(position).sourceTollName + " - " +mValues.get(position).destTollName;
+        holder.mSourceDest.setText(sourceDest);
+        holder.mPrice.setText(String.valueOf(mValues.get(position).price));
+        holder.mTime.setText(String.valueOf(mValues.get(position).timestamp));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,8 +61,6 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
         public final TextView mSourceDest;
         public final TextView mVehicleName;
         public final TextView mTime;
@@ -69,8 +71,6 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
             mSourceDest = (TextView) view.findViewById(R.id.sourceDest);
             mVehicleName = (TextView) view.findViewById(R.id.vehicleName);
             mTime = (TextView) view.findViewById(R.id.time);
@@ -79,7 +79,7 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mPrice.getText() + "'";
         }
     }
 }

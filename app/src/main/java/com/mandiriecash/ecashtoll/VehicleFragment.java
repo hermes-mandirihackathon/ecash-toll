@@ -1,7 +1,9 @@
 package com.mandiriecash.ecashtoll;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -69,6 +71,14 @@ public class VehicleFragment extends Fragment {
             }
             recyclerView.setAdapter(new VehicleRecyclerViewAdapter(ListVehicleContent.ITEMS, mListener));
         }
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startCreateVehicleActivity();
+            }
+        });
         return view;
     }
 
@@ -90,6 +100,7 @@ public class VehicleFragment extends Fragment {
         mListener = null;
     }
 
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -103,5 +114,10 @@ public class VehicleFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Vehicle item);
+    }
+
+    public void startCreateVehicleActivity(){
+        Intent intent = new Intent(getActivity(),CreateVehicleActivity.class);
+        startActivityForResult(intent,MainMenuActivity.CREATE_VEHICLE_ACTIVITY);
     }
 }

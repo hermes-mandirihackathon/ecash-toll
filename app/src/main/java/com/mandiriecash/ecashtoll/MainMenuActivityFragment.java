@@ -10,7 +10,7 @@ import android.view.ViewGroup;
  * A placeholder fragment containing a simple view.
  */
 public class MainMenuActivityFragment extends Fragment {
-
+    MainMenuPagerAdapter mainMenuPagerAdapter;
     public MainMenuActivityFragment() {
     }
 
