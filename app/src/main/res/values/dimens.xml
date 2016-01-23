@@ -7,4 +7,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="et_input_padding_bottom">20dp</dimen>
+
+    <dimen name="et_line_separator_size">2dp</dimen>
 </resources>
