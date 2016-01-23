@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mandiriecash.ecashtoll.dummy.LogActivityContent;
-import com.mandiriecash.ecashtoll.dummy.LogActivityContent.LogActivity;
+import com.mandiriecash.ecashtoll.dummy.ListVehicleContent;
+import com.mandiriecash.ecashtoll.dummy.ListVehicleContent.Vehicle;
 
 /**
  * A fragment representing a list of Items.
@@ -19,7 +19,7 @@ import com.mandiriecash.ecashtoll.dummy.LogActivityContent.LogActivity;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class LogActivityFragment extends Fragment {
+public class VehicleFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -31,13 +31,13 @@ public class LogActivityFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public LogActivityFragment() {
+    public VehicleFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static LogActivityFragment newInstance(int columnCount) {
-        LogActivityFragment fragment = new LogActivityFragment();
+    public static VehicleFragment newInstance(int columnCount) {
+        VehicleFragment fragment = new VehicleFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -56,7 +56,7 @@ public class LogActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -67,7 +67,7 @@ public class LogActivityFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new LogActivityViewAdapter(LogActivityContent.ITEMS, mListener));
+            recyclerView.setAdapter(new VehicleRecyclerViewAdapter(ListVehicleContent.ITEMS, mListener));
         }
         return view;
     }
@@ -102,6 +102,6 @@ public class LogActivityFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(LogActivity item);
+        void onListFragmentInteraction(Vehicle item);
     }
 }

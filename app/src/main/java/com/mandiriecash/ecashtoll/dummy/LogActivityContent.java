@@ -11,7 +11,7 @@ import java.util.Map;
  * <p/>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class DummyContent {
+public class LogActivityContent {
 
     /**
      * An array of sample (dummy) items.
@@ -38,16 +38,12 @@ public class DummyContent {
     }
 
     private static LogActivity createDummyItem(int position) {
-        return new LogActivity(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
-
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
+        return new LogActivity(String.valueOf(position),
+                "Tol "+position,
+                "Tol 2 "+position,
+                "Kendaraan "+position,
+                System.currentTimeMillis(),
+                100000);
     }
 
     /**
@@ -55,29 +51,24 @@ public class DummyContent {
      */
     public static class LogActivity {
         public final String id;
-        public final String content;
-        public final String details;
         public final String sourceTollName;
         public final String destTollName;
-        public final String price;
+        public final int price;
         public final String vehicleName;
         public final long timestamp;
 
-        public LogActivity(String id, String content, String details) {
+        public LogActivity(String id, String sourceTollName,String destTollName,String vehicleName,long timestamp,int price){
             this.id = id;
-            this.content = content;
-            this.details = details;
-            //TODO implement
-            this.sourceTollName = "Jakarta";
-            this.destTollName = "Cikampek";
-            this.price = "100000";
-            this.vehicleName = "Odong odong";
-            this.timestamp = System.currentTimeMillis();
+            this.sourceTollName = sourceTollName;
+            this.destTollName = destTollName;
+            this.vehicleName = vehicleName;
+            this.timestamp = timestamp;
+            this.price = price;
         }
 
         @Override
         public String toString() {
-            return content;
+            return this.sourceTollName + " " + this.destTollName + " " + this.vehicleName + " " + this.price;
         }
     }
 }

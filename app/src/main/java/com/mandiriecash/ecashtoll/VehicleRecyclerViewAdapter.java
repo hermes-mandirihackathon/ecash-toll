@@ -6,22 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mandiriecash.ecashtoll.LogActivityFragment.OnListFragmentInteractionListener;
-import com.mandiriecash.ecashtoll.dummy.LogActivityContent.LogActivity;
+import com.mandiriecash.ecashtoll.VehicleFragment.OnListFragmentInteractionListener;
+import com.mandiriecash.ecashtoll.dummy.ListVehicleContent.Vehicle;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link LogActivity} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Vehicle} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityViewAdapter.ViewHolder> {
+public class VehicleRecyclerViewAdapter extends RecyclerView.Adapter<VehicleRecyclerViewAdapter.ViewHolder> {
 
-    private final List<LogActivity> mValues;
+    private final List<Vehicle> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public LogActivityViewAdapter(List<LogActivity> items, OnListFragmentInteractionListener listener) {
+    public VehicleRecyclerViewAdapter(List<Vehicle> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,7 +36,8 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
+        holder.mNameView.setText(mValues.get(position).name);
+        holder.mPlateNoView.setText(mValues.get(position).plateNo);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,29 +58,16 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public final TextView mSourceDest;
-        public final TextView mVehicleName;
-        public final TextView mTime;
-        public final TextView mPrice;
+        public final TextView mNameView;
+        public final TextView mPlateNoView;
 
-        public LogActivity mItem;
+        public Vehicle mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
-            mSourceDest = (TextView) view.findViewById(R.id.sourceDest);
-            mVehicleName = (TextView) view.findViewById(R.id.vehicleName);
-            mTime = (TextView) view.findViewById(R.id.time);
-            mPrice = (TextView) view.findViewById(R.id.price);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            mNameView = (TextView) view.findViewById(R.id.name);
+            mPlateNoView = (TextView) view.findViewById(R.id.plateNo);
         }
     }
 }
