@@ -25,7 +25,13 @@
         </activity>
         <activity
             android:name=".CreateVehicleActivity"
-            android:label="@string/title_activity_create_vehicle"></activity>
+            android:parentActivityName=".MainMenuActivity"
+            android:label="@string/title_activity_create_vehicle">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainMenuActivity" />
+        </activity>
     </application>
 
 </manifest>

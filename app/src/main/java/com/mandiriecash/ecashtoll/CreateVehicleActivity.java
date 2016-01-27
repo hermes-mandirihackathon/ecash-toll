@@ -1,5 +1,6 @@
 package com.mandiriecash.ecashtoll;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.Image;
@@ -50,6 +51,12 @@ public class CreateVehicleActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //add backbutton
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
