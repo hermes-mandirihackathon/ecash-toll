@@ -23,6 +23,8 @@
         <item name="android:paddingBottom">@dimen/et_input_padding_bottom</item>
     </style>
     <style name="ET.ViewPager">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/colorBlueLight</item>
         <item name="tabTextColor">@color/colorWhite</item>
         <item name="tabSelectedTextColor">@color/colorWhite</item>
@@ -31,5 +33,13 @@
         <item name="android:background">@color/colorAccent</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>
-
+    <style name="ET.BalanceLeft">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>
