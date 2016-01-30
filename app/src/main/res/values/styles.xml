@@ -42,4 +42,26 @@
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">20sp</item>
     </style>
+    <style name="ET.List"/>
+    <style name="ET.List.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ET.List.Subtitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="ET.List.LineSeparator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/et_line_separator_size</item>
+        <item name="android:background">@color/colorLineSeparator</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+    </style>
 </resources>

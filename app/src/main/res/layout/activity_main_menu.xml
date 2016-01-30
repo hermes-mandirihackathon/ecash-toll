@@ -39,8 +39,7 @@
         android:background="@color/colorBlueLight">
         <TextView
             style="@style/ET.BalanceLeft"
-            android:text="Rp 300.000,00"
-            />
+            android:text="Rp 300.000,00"/>
     </FrameLayout>
 
     <android.support.design.widget.TabLayout
