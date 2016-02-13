@@ -1,6 +1,7 @@
 package com.mandiriecash.ecashtoll;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,9 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.mandiriecash.ecashtoll.dummy.LogActivityContent;
-import com.mandiriecash.ecashtoll.dummy.LogActivityContent.LogActivity;
+import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
+import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
+import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
+import com.mandiriecash.ecashtoll.services.models.LogActivity;
+import com.mandiriecash.ecashtoll.services.requests.GetActivitiesRequest;
+import com.mandiriecash.ecashtoll.services.responses.GetActivitiesResponse;
 
 /**
  * A fragment representing a list of Items.
@@ -67,7 +73,7 @@ public class LogActivityFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new LogActivityViewAdapter(LogActivityContent.ITEMS, mListener));
+            recyclerView.setAdapter(new LogActivityViewAdapter(null, mListener));
         }
         return view;
     }
@@ -103,5 +109,40 @@ public class LogActivityFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(LogActivity item);
+    }
+
+    private class GetActivityTask extends AsyncTask<GetActivitiesRequest,Void,GetActivitiesResponse> {
+        LogActivityViewAdapter mViewAdapter;
+
+        public GetActivityTask(LogActivityViewAdapter logActivityViewAdapter) {
+            mViewAdapter = logActivityViewAdapter;
+        }
+
+        @Override
+        protected GetActivitiesResponse doInBackground(GetActivitiesRequest... params) {
+            GetActivitiesRequest request = params[0];
+            ETollSyncRESTClient client = new ETollSyncRESTClientImpl();
+            GetActivitiesResponse response = null;
+            try {
+                response = client.getActivities(request);
+            } catch (ETollIOException e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(GetActivitiesResponse getActivitiesResponse) {
+            if (getActivitiesResponse != null){
+                if (!getActivitiesResponse.getStatus().equals("error")){
+                    //TODO refresh viewadapter data
+                    mViewAdapter.setmValues(getActivitiesResponse.getActivities());
+                    mViewAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(),getActivitiesResponse.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }

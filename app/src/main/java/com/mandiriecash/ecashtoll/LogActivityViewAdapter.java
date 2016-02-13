@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mandiriecash.ecashtoll.LogActivityFragment.OnListFragmentInteractionListener;
-import com.mandiriecash.ecashtoll.dummy.LogActivityContent.LogActivity;
+import com.mandiriecash.ecashtoll.services.models.LogActivity;
 
 import java.util.List;
 
@@ -18,12 +18,16 @@ import java.util.List;
  */
 public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityViewAdapter.ViewHolder> {
 
-    private final List<LogActivity> mValues;
+    private List<LogActivity> mValues;
     private final OnListFragmentInteractionListener mListener;
 
     public LogActivityViewAdapter(List<LogActivity> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+    }
+
+    public void setmValues(List<LogActivity> mValues) {
+        this.mValues = mValues;
     }
 
     @Override
@@ -36,11 +40,11 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mVehicleName.setText(mValues.get(position).vehicleName);
-        String sourceDest = mValues.get(position).sourceTollName + " - " +mValues.get(position).destTollName;
+        holder.mVehicleName.setText(mValues.get(position).getVehicle_name());
+        String sourceDest = mValues.get(position).getSource_toll_id() + " - " +mValues.get(position).getDest_toll_id();
         holder.mSourceDest.setText(sourceDest);
-        holder.mPrice.setText(String.valueOf(mValues.get(position).price));
-        holder.mTime.setText(String.valueOf(mValues.get(position).timestamp));
+        holder.mPrice.setText(String.valueOf(mValues.get(position).getPrice()));
+        holder.mTime.setText(String.valueOf(mValues.get(position).getTimestamp()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

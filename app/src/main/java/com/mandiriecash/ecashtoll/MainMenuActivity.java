@@ -12,7 +12,7 @@ import android.view.MenuInflater;
 import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.dummy.ListVehicleContent;
-import com.mandiriecash.ecashtoll.dummy.LogActivityContent;
+import com.mandiriecash.ecashtoll.services.models.LogActivity;
 
 public class MainMenuActivity extends AppCompatActivity implements VehicleFragment.OnListFragmentInteractionListener, LogActivityFragment.OnListFragmentInteractionListener{
     public static final int CREATE_VEHICLE_ACTIVITY = 1;
@@ -92,7 +92,7 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
     }
 
     @Override
-    public void onListFragmentInteraction(LogActivityContent.LogActivity item) {
+    public void onListFragmentInteraction(LogActivity item) {
         //TODO impl
     }
 

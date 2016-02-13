@@ -1,13 +1,14 @@
 package com.mandiriecash.ecashtoll.services.responses;
 
 import com.mandiriecash.ecashtoll.services.models.Activity;
+import com.mandiriecash.ecashtoll.services.models.LogActivity;
 
 import java.util.List;
 
 public class GetActivitiesResponse {
     String status;
     String message;
-    List<Activity> activities;
+    List<LogActivity> activities;
 
     public String getStatus() {
         return status;
@@ -25,11 +26,13 @@ public class GetActivitiesResponse {
         this.message = message;
     }
 
-    public List<Activity> getActivities() {
+    public List<LogActivity> getActivities() {
         return activities;
     }
 
-    public void setActivities(List<Activity> activities) {
+    public void setActivities(List<LogActivity> activities) {
         this.activities = activities;
     }
+
+
 }
