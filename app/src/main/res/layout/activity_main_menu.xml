@@ -39,6 +39,7 @@
         android:background="@color/colorBlueLight">
         <TextView
             style="@style/ET.BalanceLeft"
+            android:id="@+id/balance"
             android:text="Rp 300.000,00"/>
     </FrameLayout>
 

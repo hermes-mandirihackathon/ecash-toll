@@ -9,15 +9,13 @@ import com.mandiriecash.ecashtoll.services.requests.BalanceInquiryRequest;
 import com.mandiriecash.ecashtoll.services.responses.BalanceInquiryResponse;
 
 public class BalanceInquiryTask extends AsyncTask<Void,Void,Boolean> {
-    protected Context mContext;
     protected BalanceInquiryRequest mRequest;
     protected ETollSyncRESTClient mClient;
 
     protected BalanceInquiryResponse mResponse;
     protected Exception mException;
 
-    public BalanceInquiryTask(Context context, ETollSyncRESTClient client, String msisdn, String token){
-        mContext = context;
+    public BalanceInquiryTask(ETollSyncRESTClient client, String msisdn, String token){
         mClient = client;
         mRequest = (new BalanceInquiryRequest.Builder())
             .msisdn(msisdn)
