@@ -19,6 +19,8 @@ import com.mandiriecash.ecashtoll.services.models.LogActivity;
 import com.mandiriecash.ecashtoll.services.requests.GetActivitiesRequest;
 import com.mandiriecash.ecashtoll.services.responses.GetActivitiesResponse;
 
+import java.util.ArrayList;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -73,7 +75,7 @@ public class LogActivityFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new LogActivityViewAdapter(null, mListener));
+            recyclerView.setAdapter(new LogActivityViewAdapter(new ArrayList<LogActivity>(), mListener));
         }
         return view;
     }

@@ -4,6 +4,7 @@ public class LoginResponse {
     String status;
     String message;
     String token;
+    String msisdn;
 
     public String getStatus() {
         return status;
@@ -27,5 +28,13 @@ public class LoginResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getMsisdn() {
+        return msisdn;
+    }
+
+    public void setMsisdn(String msisdn) {
+        this.msisdn = msisdn;
     }
 }

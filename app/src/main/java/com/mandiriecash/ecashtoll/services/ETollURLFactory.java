@@ -2,7 +2,7 @@ package com.mandiriecash.ecashtoll.services;
 
 public class ETollURLFactory {
     //TODO change
-    public static final String BASE_URL = "";
+    public static final String BASE_URL = "http://10.24.109.99:8080/ecashtollapi";
 
     /**
      * @param uid device id

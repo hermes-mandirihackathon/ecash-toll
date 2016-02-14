@@ -106,4 +106,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="preference_file_key">com.mandiriecash.ecashtoll.PREFERENCE_FILE_KEY</string>
 </resources>
