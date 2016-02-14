@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
+import com.mandiriecash.ecashtoll.services.async_tasks.LoginTask;
 import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
 import com.mandiriecash.ecashtoll.services.requests.LoginRequest;
 import com.mandiriecash.ecashtoll.services.responses.LoginResponse;
@@ -93,7 +94,8 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        mAuthTask = new UserLoginTask(email, password);
+        //TODO uid
+        mAuthTask = new UserLoginTask(this,new ETollSyncRESTClientImpl(),"1",email,password);
         mAuthTask.execute();
     }
 
@@ -101,53 +103,34 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, LoginResponse> {
-        private final String mMsisdn;
-        private final String mCredentials;
-        private Exception mException;
+    public class UserLoginTask extends LoginTask {
+        Context mContext;
 
-        UserLoginTask(String msisdn, String credentials) {
-            mMsisdn = msisdn;
-            mCredentials = credentials;
+        public UserLoginTask(Context context, ETollSyncRESTClient client, String uid, String msisdn, String credentials) {
+            super(client, uid, msisdn, credentials);
+            mContext = context;
         }
 
         @Override
-        protected LoginResponse doInBackground(Void... params) {
-            LoginResponse response = null;
-            try {
-                //TODO change uid
-                ETollSyncRESTClient client = new ETollSyncRESTClientImpl();
-                response = client.login((new LoginRequest.Builder().
-                        msisdn(mMsisdn).
-                        credentials(mCredentials)).
-                        build());
-            } catch (ETollIOException e) {
-                mException = e;
-            }
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(final LoginResponse response) {
-            Context context = getBaseContext();
-            if (response != null) {
-                String toastMessage;
-                if (response.getStatus().equals("ok")) {
-                    SharedPreferences sharedPref = context.getSharedPreferences(
-                            getString(R.string.preference_file_key),Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("token",response.getToken());
-                    editor.putString("msisdn",response.getMsisdn());
-                    editor.apply();
-                    Intent intent = new Intent(context,MainMenuActivity.class);
-                    //TODO set as first intent with setflags?
-                    startActivity(intent);
-                } else {
-                    toastMessage = response.getMessage();
-                    Toast.makeText(getBaseContext(),toastMessage,Toast.LENGTH_LONG).show();
-                }
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                SharedPreferences sharedPref = mContext.getSharedPreferences(
+                        getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("token",mResponse.getToken());
+                editor.putString("msisdn",mResponse.getMsisdn());
+                editor.apply();
+                Intent intent = new Intent(mContext,MainMenuActivity.class);
+                //TODO set as first intent with setflags?
+                startActivity(intent);
             } else {
-                Toast.makeText(getBaseContext(),mException.getMessage(),Toast.LENGTH_LONG).show();
+                String toastMessage;
+                if (mException != null) {
+                    toastMessage = mException.getMessage();
+                } else {
+                    toastMessage = mResponse.getMessage();
+                }
+                Toast.makeText(mContext,toastMessage,Toast.LENGTH_LONG).show();
             }
         }
 

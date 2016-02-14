@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
+import com.mandiriecash.ecashtoll.services.async_tasks.GetActivitiesTask;
 import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
 import com.mandiriecash.ecashtoll.services.models.LogActivity;
 import com.mandiriecash.ecashtoll.services.requests.GetActivitiesRequest;
@@ -113,36 +114,30 @@ public class LogActivityFragment extends Fragment {
         void onListFragmentInteraction(LogActivity item);
     }
 
-    private class GetActivityTask extends AsyncTask<GetActivitiesRequest,Void,GetActivitiesResponse> {
+    private class LogActGetActivitiesTask extends GetActivitiesTask {
         LogActivityViewAdapter mViewAdapter;
+        Context mContext;
 
-        public GetActivityTask(LogActivityViewAdapter logActivityViewAdapter) {
+        public LogActGetActivitiesTask(Context context,
+                                       LogActivityViewAdapter logActivityViewAdapter,
+                                       ETollSyncRESTClient client,
+                                       String msisdn,String token) {
+            super(client,msisdn,token);
             mViewAdapter = logActivityViewAdapter;
+            mContext = context;
         }
 
         @Override
-        protected GetActivitiesResponse doInBackground(GetActivitiesRequest... params) {
-            GetActivitiesRequest request = params[0];
-            ETollSyncRESTClient client = new ETollSyncRESTClientImpl();
-            GetActivitiesResponse response = null;
-            try {
-                response = client.getActivities(request);
-            } catch (ETollIOException e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(GetActivitiesResponse getActivitiesResponse) {
-            if (getActivitiesResponse != null){
-                if (!getActivitiesResponse.getStatus().equals("error")){
-                    //TODO refresh viewadapter data
-                    mViewAdapter.setmValues(getActivitiesResponse.getActivities());
-                    mViewAdapter.notifyDataSetChanged();
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                mViewAdapter.setmValues(mResponse.getActivities());
+                mViewAdapter.notifyDataSetChanged();
+            } else {
+                String toastMessage;
+                if (mException != null) {
+                    toastMessage = mException.getMessage();
                 } else {
-                    Toast.makeText(getContext(),getActivitiesResponse.getMessage(),Toast.LENGTH_LONG).show();
+                    toastMessage = mResponse.getMessage();
                 }
             }
         }
