@@ -54,6 +54,6 @@ public class ETollURLFactory {
      * @return string
      */
     public String createVehicle(String token,String msisdn,String name,String plateNo){
-        return String.format("%s/%s?token=%s&msisdn=%s&name=%s&plateNo=%s",BASE_URL,"vehicles/create",token,msisdn,name,plateNo);
+        return String.format("%s/%s?token=%s&msisdn=%s&name=%s&plate_no=%s",BASE_URL,"vehicles/create",token,msisdn,name,plateNo);
     }
 }

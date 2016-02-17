@@ -98,9 +98,10 @@ public class LoginActivity extends AppCompatActivity {
                         getString(R.string.preference_file_key),Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("token",mResponse.getToken());
-                editor.putString("msisdn",mResponse.getMsisdn());
+                editor.putString("msisdn", mResponse.getMsisdn());
                 editor.apply();
                 Intent intent = new Intent(mContext,MainMenuActivity.class);
+//                Intent intent = new Intent(mContext,CreateVehicleActivity.class);
                 //TODO set as first intent with setflags?
                 startActivity(intent);
             } else {

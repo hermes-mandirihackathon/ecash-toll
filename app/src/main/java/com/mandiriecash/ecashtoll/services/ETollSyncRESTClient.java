@@ -27,5 +27,5 @@ public interface ETollSyncRESTClient {
 
     public GetVehiclesResponse getVehicles(GetVehiclesRequest request) throws ETollIOException;
 
-    public CreateVehicleResponse createVehicle(CreateVehicleRequest request) throws ETollIOException;
+    public CreateVehicleResponse createVehicle(CreateVehicleRequest request) throws ETollIOException,ETollHttpException;
 }

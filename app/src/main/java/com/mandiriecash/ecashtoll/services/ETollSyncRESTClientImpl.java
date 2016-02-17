@@ -94,13 +94,15 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
     }
 
     @Override
-    public CreateVehicleResponse createVehicle(CreateVehicleRequest request) throws ETollIOException {
+    public CreateVehicleResponse createVehicle(CreateVehicleRequest request) throws ETollIOException,ETollHttpException {
         Request httpRequest = new Request.Builder()
                 .url(urlFactory.createVehicle(request.getToken(),request.getMsisdn(),request.getName(),request.getPlate_no()))
                 .build();
         try {
             Response response = client.newCall(httpRequest).execute();
-            return gson.fromJson(response.body().charStream(),CreateVehicleResponse.class);
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),CreateVehicleResponse.class);
+            } else throw new ETollHttpException(response.code(),response.body().string());
         } catch (IOException e) {
             throw new ETollIOException(e);
         }
