@@ -1,11 +1,13 @@
 package com.mandiriecash.ecashtoll;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,8 +25,12 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
     public static final int CREATE_VEHICLE_ACTIVITY = 1;
     MainMenuPagerAdapter mMainMenuPagerAdapter;
     ViewPager mViewPager;
+    ETollSyncRESTClient mETollSyncRESTClient;
 
     TextView mBalanceTextView;
+
+    private String mMsisdn;
+    private String mToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,18 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
             mViewPager.setCurrentItem(savedInstanceState.getInt("fid"));
         }
 
+        mETollSyncRESTClient = new ETollSyncRESTClientImpl();
+
+        //get token and msisdn. if null, go to login page
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        mToken = sharedPref.getString("token",null);
+        mMsisdn = sharedPref.getString("msisdn",null);
+        //TODO check if expired token
+        if (mToken == null){
+            toLoginActivity();
+        }
+
 
 //TODO hapus diganti di fragment
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -84,15 +102,9 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPref = getSharedPreferences(
-                getString(R.string.preference_file_key),Context.MODE_PRIVATE);
-        String token = sharedPref.getString("token",null);
-        String msisdn = sharedPref.getString("msisdn",null);
-        if (token == null){
-            toLoginActivity();
-        }
+        mETollSyncRESTClient = new ETollSyncRESTClientImpl();
         MainMenuBalanceInquiryTask balanceInqTask = new MainMenuBalanceInquiryTask(
-                this,new ETollSyncRESTClientImpl(),mBalanceTextView,msisdn,token);
+                this,getmETollSyncRESTClient(),mBalanceTextView,mMsisdn,mToken);
         balanceInqTask.execute();
     }
 
@@ -145,13 +157,20 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
             if (success){
                 mBalanceTextView.setText(mResponse.getAccountBalance());
             } else {
-                String toastMessage;
                 if (mException != null) {
-                    toastMessage = mException.getMessage();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+                    alertDialog.setTitle("Error");
+                    alertDialog.setMessage(mException.getMessage());
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Close", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 } else {
-                    toastMessage = mResponse.getMessage();
+                    Toast.makeText(mContext,mResponse.getMessage(),Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(mContext,toastMessage,Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -160,5 +179,17 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
         Intent intent = new Intent(this,LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    public ETollSyncRESTClient getmETollSyncRESTClient() {
+        return mETollSyncRESTClient;
+    }
+
+    public String getmMsisdn() {
+        return mMsisdn;
+    }
+
+    public String getmToken() {
+        return mToken;
     }
 }

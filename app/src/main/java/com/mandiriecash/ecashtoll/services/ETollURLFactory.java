@@ -29,7 +29,7 @@ public class ETollURLFactory {
      * @return string
      */
     public String getActivities(String token,String msisdn){
-        return String.format("%s/%s?token=%s&msisdn=%s",BASE_URL,"activities",token,msisdn);
+        return String.format("%s/%s?token=%s&msisdn=%s",BASE_URL,"activities/",token,msisdn);
     }
 
     public String createActivity(String msisdn,String token,long timestamp,int vehicle_id,int source_toll_id,int dest_toll_id,int price){
@@ -43,7 +43,7 @@ public class ETollURLFactory {
      * @return string
      */
     public String getVehicles(String token,String msisdn){
-        return String.format("%s/%s?token=%s&msisdn=%s",BASE_URL,"vehicles",token,msisdn);
+        return String.format("%s/%s?token=%s&msisdn=%s",BASE_URL,"vehicles/",token,msisdn);
     }
 
     /**

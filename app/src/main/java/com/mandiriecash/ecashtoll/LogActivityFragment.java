@@ -36,6 +36,8 @@ public class LogActivityFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    private LogActivityViewAdapter mLogActivityViewAdapter;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -76,7 +78,8 @@ public class LogActivityFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new LogActivityViewAdapter(new ArrayList<LogActivity>(), mListener));
+            mLogActivityViewAdapter = new LogActivityViewAdapter(new ArrayList<LogActivity>(), mListener);
+            recyclerView.setAdapter(mLogActivityViewAdapter);
         }
         return view;
     }
@@ -99,6 +102,16 @@ public class LogActivityFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainMenuActivity activity = (MainMenuActivity) getActivity();
+        LogActGetActivitiesTask logActGetActivitiesTask = new LogActGetActivitiesTask(
+                getContext(),mLogActivityViewAdapter,
+                activity.getmETollSyncRESTClient(),activity.getmMsisdn(),activity.getmToken());
+        logActGetActivitiesTask.execute();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -114,7 +127,7 @@ public class LogActivityFragment extends Fragment {
         void onListFragmentInteraction(LogActivity item);
     }
 
-    private class LogActGetActivitiesTask extends GetActivitiesTask {
+    public class LogActGetActivitiesTask extends GetActivitiesTask {
         LogActivityViewAdapter mViewAdapter;
         Context mContext;
 
@@ -139,6 +152,7 @@ public class LogActivityFragment extends Fragment {
                 } else {
                     toastMessage = mResponse.getMessage();
                 }
+                Toast.makeText(mContext,toastMessage,Toast.LENGTH_LONG).show();
             }
         }
     }
