@@ -1,62 +1,35 @@
 package com.mandiriecash.ecashtoll;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+import android.opengl.Visibility;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
 import com.mandiriecash.ecashtoll.services.async_tasks.LoginTask;
-import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
-import com.mandiriecash.ecashtoll.services.requests.LoginRequest;
-import com.mandiriecash.ecashtoll.services.responses.LoginResponse;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
+    private TextView mErrorTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
-
         mPasswordView = (EditText) findViewById(R.id.password);
+        mErrorTextView = (TextView) findViewById(R.id.error);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -82,10 +55,6 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -95,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = mPasswordView.getText().toString();
 
         //TODO uid
-        mAuthTask = new UserLoginTask(this,new ETollSyncRESTClientImpl(),"1",email,password);
+        UserLoginTask mAuthTask = new UserLoginTask(this, new ETollSyncRESTClientImpl(), "1", email, password);
         mAuthTask.execute();
     }
 
@@ -105,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public class UserLoginTask extends LoginTask {
         Context mContext;
+        ProgressDialog mProgressDialog;
 
         public UserLoginTask(Context context, ETollSyncRESTClient client, String uid, String msisdn, String credentials) {
             super(client, uid, msisdn, credentials);
@@ -112,7 +82,17 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
+        protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(mContext);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Logging in...");
+            mProgressDialog.show();
+            mErrorTextView.setVisibility(View.GONE);
+        }
+
+        @Override
         protected void onPostExecute(Boolean success) {
+            mProgressDialog.dismiss();
             if (success) {
                 SharedPreferences sharedPref = mContext.getSharedPreferences(
                         getString(R.string.preference_file_key),Context.MODE_PRIVATE);
@@ -124,13 +104,21 @@ public class LoginActivity extends AppCompatActivity {
                 //TODO set as first intent with setflags?
                 startActivity(intent);
             } else {
-                String toastMessage;
                 if (mException != null) {
-                    toastMessage = mException.getMessage();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+                    alertDialog.setTitle("Error");
+                    alertDialog.setMessage(mException.getMessage());
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Close", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 } else {
-                    toastMessage = mResponse.getMessage();
+                    mErrorTextView.setText(mResponse.getMessage());
+                    mErrorTextView.setVisibility(View.VISIBLE);
                 }
-                Toast.makeText(mContext,toastMessage,Toast.LENGTH_LONG).show();
             }
         }
 

@@ -6,4 +6,5 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorLineSeparator">#d1d1d1</color>
     <color name="colorBlueLight">#bccedf</color>
+    <color name="colorRed">#ff4a4a</color>
 </resources>
