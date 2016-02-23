@@ -16,6 +16,7 @@ import com.mandiriecash.ecashtoll.services.responses.GetVehiclesResponse;
 import com.mandiriecash.ecashtoll.services.responses.LoginResponse;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,7 +24,7 @@ import okhttp3.Response;
 
 public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
     ETollURLFactory urlFactory = new ETollURLFactory();
-    OkHttpClient client = new OkHttpClient();
+    OkHttpClient client = new OkHttpClient.Builder().readTimeout(20000, TimeUnit.MILLISECONDS).build();
     Gson gson = new Gson();
 
     @Override

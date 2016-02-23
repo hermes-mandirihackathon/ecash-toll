@@ -76,7 +76,7 @@ public class VehicleFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mVehicleRecyclerViewAdapter = new VehicleRecyclerViewAdapter(new ArrayList<Vehicle>(), mListener);
+            mVehicleRecyclerViewAdapter = new VehicleRecyclerViewAdapter(new ArrayList<Vehicle>(), mListener, getContext());
             recyclerView.setAdapter(mVehicleRecyclerViewAdapter);
         }
 

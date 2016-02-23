@@ -1,14 +1,17 @@
 package com.mandiriecash.ecashtoll;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mandiriecash.ecashtoll.VehicleFragment.OnListFragmentInteractionListener;
 import com.mandiriecash.ecashtoll.services.models.Vehicle;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -21,10 +24,12 @@ public class VehicleRecyclerViewAdapter extends RecyclerView.Adapter<VehicleRecy
 
     private List<Vehicle> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private Context mContext;
 
-    public VehicleRecyclerViewAdapter(List<Vehicle> items, OnListFragmentInteractionListener listener) {
+    public VehicleRecyclerViewAdapter(List<Vehicle> items, OnListFragmentInteractionListener listener, Context context) {
         mValues = items;
         mListener = listener;
+        mContext = context;
     }
 
     public List<Vehicle> getmValues() {
@@ -47,6 +52,7 @@ public class VehicleRecyclerViewAdapter extends RecyclerView.Adapter<VehicleRecy
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mPlateNoView.setText(mValues.get(position).getPlateNo());
+        Picasso.with(mContext).load(mValues.get(position).getPhotoUrl()).into(holder.mVehicleImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +75,7 @@ public class VehicleRecyclerViewAdapter extends RecyclerView.Adapter<VehicleRecy
         public final View mView;
         public final TextView mNameView;
         public final TextView mPlateNoView;
+        public final ImageView mVehicleImageView;
 
         public Vehicle mItem;
 
@@ -77,6 +84,7 @@ public class VehicleRecyclerViewAdapter extends RecyclerView.Adapter<VehicleRecy
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.name);
             mPlateNoView = (TextView) view.findViewById(R.id.plateNo);
+            mVehicleImageView = (ImageView) view.findViewById(R.id.vehicleImage);
         }
     }
 }
