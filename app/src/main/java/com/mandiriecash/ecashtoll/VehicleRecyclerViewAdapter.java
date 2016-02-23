@@ -1,13 +1,14 @@
 package com.mandiriecash.ecashtoll;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mandiriecash.ecashtoll.VehicleFragment.OnListFragmentInteractionListener;
-import com.mandiriecash.ecashtoll.dummy.ListVehicleContent.Vehicle;
+import com.mandiriecash.ecashtoll.services.models.Vehicle;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class VehicleRecyclerViewAdapter extends RecyclerView.Adapter<VehicleRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Vehicle> mValues;
+    private List<Vehicle> mValues;
     private final OnListFragmentInteractionListener mListener;
 
     public VehicleRecyclerViewAdapter(List<Vehicle> items, OnListFragmentInteractionListener listener) {
@@ -26,18 +27,26 @@ public class VehicleRecyclerViewAdapter extends RecyclerView.Adapter<VehicleRecy
         mListener = listener;
     }
 
+    public List<Vehicle> getmValues() {
+        return mValues;
+    }
+
+    public void setmValues(List<Vehicle> mValues) {
+        this.mValues = mValues;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.fragment_vehicle, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mNameView.setText(mValues.get(position).name);
-        holder.mPlateNoView.setText(mValues.get(position).plateNo);
+        holder.mNameView.setText(mValues.get(position).getName());
+        holder.mPlateNoView.setText(mValues.get(position).getPlateNo());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

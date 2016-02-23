@@ -1,7 +1,6 @@
 package com.mandiriecash.ecashtoll.services;
 
 public class ETollURLFactory {
-    //TODO change
     public static final String BASE_URL = "http://etoll-api.mybluemix.net";
 
     /**

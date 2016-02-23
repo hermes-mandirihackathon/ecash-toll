@@ -15,11 +15,11 @@ import android.view.MenuInflater;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mandiriecash.ecashtoll.dummy.ListVehicleContent;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
 import com.mandiriecash.ecashtoll.services.async_tasks.BalanceInquiryTask;
 import com.mandiriecash.ecashtoll.services.models.LogActivity;
+import com.mandiriecash.ecashtoll.services.models.Vehicle;
 
 public class MainMenuActivity extends AppCompatActivity implements VehicleFragment.OnListFragmentInteractionListener, LogActivityFragment.OnListFragmentInteractionListener{
     public static final int CREATE_VEHICLE_ACTIVITY = 1;
@@ -68,7 +68,6 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance
-            System.out.println(savedInstanceState.getInt("fid"));
             mViewPager.setCurrentItem(savedInstanceState.getInt("fid"));
         }
 
@@ -125,7 +124,7 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
     }
 
     @Override
-    public void onListFragmentInteraction(ListVehicleContent.Vehicle item) {
+    public void onListFragmentInteraction(Vehicle item) {
         //TODO impl
     }
 

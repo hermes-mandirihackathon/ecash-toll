@@ -3,6 +3,7 @@ package com.mandiriecash.ecashtoll;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,9 +12,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.mandiriecash.ecashtoll.dummy.ListVehicleContent;
-import com.mandiriecash.ecashtoll.dummy.ListVehicleContent.Vehicle;
+import com.mandiriecash.ecashtoll.services.models.Vehicle;
+import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
+import com.mandiriecash.ecashtoll.services.async_tasks.GetVehiclesTask;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -28,6 +33,8 @@ public class VehicleFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    private VehicleRecyclerViewAdapter mVehicleRecyclerViewAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,15 +68,16 @@ public class VehicleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
+        if (view instanceof CoordinatorLayout) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.vehicleListRecyclerView);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new VehicleRecyclerViewAdapter(ListVehicleContent.ITEMS, mListener));
+            mVehicleRecyclerViewAdapter = new VehicleRecyclerViewAdapter(new ArrayList<Vehicle>(), mListener);
+            recyclerView.setAdapter(mVehicleRecyclerViewAdapter);
         }
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -100,6 +108,16 @@ public class VehicleFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //do some shit
+        MainMenuActivity activity = (MainMenuActivity) getActivity();
+        ActivityGetVehiclesTask activityGetVehiclesTask = new ActivityGetVehiclesTask(
+                getContext(),mVehicleRecyclerViewAdapter,
+                activity.getmETollSyncRESTClient(),activity.getmMsisdn(),activity.getmToken());
+        activityGetVehiclesTask.execute();
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -119,5 +137,35 @@ public class VehicleFragment extends Fragment {
     public void startCreateVehicleActivity(){
         Intent intent = new Intent(getActivity(),CreateVehicleActivity.class);
         startActivityForResult(intent,MainMenuActivity.CREATE_VEHICLE_ACTIVITY);
+    }
+
+    public class ActivityGetVehiclesTask extends GetVehiclesTask {
+        VehicleRecyclerViewAdapter mViewAdapter;
+        Context mContext;
+
+        public ActivityGetVehiclesTask(Context context,
+                                       VehicleRecyclerViewAdapter vehicleRecyclerViewAdapter,
+                                       ETollSyncRESTClient client,
+                                       String msisdn,String token) {
+            super(client,msisdn,token);
+            mViewAdapter = vehicleRecyclerViewAdapter;
+            mContext = context;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                mViewAdapter.setmValues(mResponse.getVehicles());
+                mViewAdapter.notifyDataSetChanged();
+            } else {
+                String toastMessage;
+                if (mException != null) {
+                    toastMessage = mException.getMessage();
+                } else {
+                    toastMessage = mResponse.getMessage();
+                }
+                Toast.makeText(mContext, toastMessage, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
