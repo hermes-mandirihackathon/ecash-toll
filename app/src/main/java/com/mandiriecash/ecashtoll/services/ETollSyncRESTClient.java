@@ -17,15 +17,15 @@ import com.mandiriecash.ecashtoll.services.responses.LoginResponse;
 import java.io.IOException;
 
 public interface ETollSyncRESTClient {
-    public LoginResponse login(LoginRequest request) throws ETollIOException;
+    public LoginResponse login(LoginRequest request) throws ETollIOException,ETollHttpException;
 
-    public BalanceInquiryResponse balance(BalanceInquiryRequest request) throws ETollIOException;
+    public BalanceInquiryResponse balance(BalanceInquiryRequest request) throws ETollIOException,ETollHttpException;
 
-    public GetActivitiesResponse getActivities(GetActivitiesRequest request) throws ETollIOException;
+    public GetActivitiesResponse getActivities(GetActivitiesRequest request) throws ETollIOException,ETollHttpException;
 
-    public CreateActivityResponse createActivity(CreateActivityRequest request) throws ETollIOException;
+    public CreateActivityResponse createActivity(CreateActivityRequest request) throws ETollIOException,ETollHttpException;
 
-    public GetVehiclesResponse getVehicles(GetVehiclesRequest request) throws ETollIOException;
+    public GetVehiclesResponse getVehicles(GetVehiclesRequest request) throws ETollIOException,ETollHttpException;
 
     public CreateVehicleResponse createVehicle(CreateVehicleRequest request) throws ETollIOException,ETollHttpException;
 }

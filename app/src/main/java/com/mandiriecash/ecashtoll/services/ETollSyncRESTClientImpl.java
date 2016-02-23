@@ -27,39 +27,49 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
     Gson gson = new Gson();
 
     @Override
-    public LoginResponse login(LoginRequest loginRequest) throws ETollIOException {
+    public LoginResponse login(LoginRequest loginRequest) throws ETollIOException, ETollHttpException {
         Request request = new Request.Builder()
                 .url(urlFactory.login(loginRequest.getUid(),loginRequest.getMsisdn(),loginRequest.getCredentials()))
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            return gson.fromJson(response.body().charStream(), LoginResponse.class);
+            if (response.isSuccessful())
+                return gson.fromJson(response.body().charStream(), LoginResponse.class);
+            else throw new ETollHttpException(response.code(),response.body().toString());
         } catch (IOException e) {
             throw new ETollIOException(e);
         }
     }
 
     @Override
-    public BalanceInquiryResponse balance(BalanceInquiryRequest balanceRequest) throws ETollIOException {
+    public BalanceInquiryResponse balance(BalanceInquiryRequest balanceRequest) throws ETollIOException, ETollHttpException {
         Request request = new Request.Builder()
                 .url(urlFactory.balance(balanceRequest.getToken(),balanceRequest.getMsisdn()))
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            return gson.fromJson(response.body().charStream(),BalanceInquiryResponse.class);
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),BalanceInquiryResponse.class);
+            } else {
+                throw new ETollHttpException(response.code(),response.body().toString());
+            }
         } catch (IOException e) {
             throw new ETollIOException(e);
         }
     }
 
     @Override
-    public GetActivitiesResponse getActivities(GetActivitiesRequest getActivitiesRequest) throws ETollIOException {
+    public GetActivitiesResponse getActivities(GetActivitiesRequest getActivitiesRequest) throws ETollIOException, ETollHttpException {
         Request request = new Request.Builder()
                 .url(urlFactory.getActivities(getActivitiesRequest.getToken(),getActivitiesRequest.getMsisdn()))
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            return gson.fromJson(response.body().charStream(),GetActivitiesResponse.class);
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),GetActivitiesResponse.class);
+            } else {
+                throw new ETollHttpException(response.code(),response.body().toString());
+            }
         } catch (IOException e){
             throw new ETollIOException(e);
         }
@@ -67,27 +77,35 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
 
 
     @Override
-    public CreateActivityResponse createActivity(CreateActivityRequest request) throws ETollIOException {
+    public CreateActivityResponse createActivity(CreateActivityRequest request) throws ETollIOException, ETollHttpException {
         Request httpRequest = new Request.Builder()
                 .url(urlFactory.createActivity(request.getMsisdn(),request.getToken(),request.getTimestamp(),request.getVehicle_id()
                     ,request.getSource_toll_id(),request.getDest_toll_id(),request.getPrice()))
                 .build();
         try {
             Response response = client.newCall(httpRequest).execute();
-            return gson.fromJson(response.body().charStream(),CreateActivityResponse.class);
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),CreateActivityResponse.class);
+            } else {
+                throw new ETollHttpException(response.code(),response.body().toString());
+            }
         } catch (IOException e) {
             throw new ETollIOException(e);
         }
     }
 
     @Override
-    public GetVehiclesResponse getVehicles(GetVehiclesRequest request) throws ETollIOException {
+    public GetVehiclesResponse getVehicles(GetVehiclesRequest request) throws ETollIOException, ETollHttpException {
         Request httpRequest = new Request.Builder()
                 .url(urlFactory.getVehicles(request.getToken(),request.getMsisdn()))
                 .build();
         try {
             Response response = client.newCall(httpRequest).execute();
-            return gson.fromJson(response.body().charStream(),GetVehiclesResponse.class);
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),GetVehiclesResponse.class);
+            } else {
+                throw new ETollHttpException(response.code(),response.body().toString());
+            }
         } catch (IOException e) {
             throw new ETollIOException(e);
         }

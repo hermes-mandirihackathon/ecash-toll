@@ -3,6 +3,7 @@ package com.mandiriecash.ecashtoll.services.async_tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.mandiriecash.ecashtoll.services.ETollHttpException;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
 import com.mandiriecash.ecashtoll.services.requests.LoginRequest;
@@ -28,7 +29,7 @@ public class LoginTask extends AsyncTask<Void, Void, Boolean> {
             if (mResponse.getStatus().equals("ok")){
                 success = true;
             }
-        } catch (ETollIOException e) {
+        } catch (ETollIOException | ETollHttpException e) {
             mException = e;
         }
         return success;

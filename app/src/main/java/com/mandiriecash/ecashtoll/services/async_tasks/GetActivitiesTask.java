@@ -3,6 +3,7 @@ package com.mandiriecash.ecashtoll.services.async_tasks;
 import android.os.AsyncTask;
 
 import com.mandiriecash.ecashtoll.LogActivityViewAdapter;
+import com.mandiriecash.ecashtoll.services.ETollHttpException;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
 import com.mandiriecash.ecashtoll.services.requests.GetActivitiesRequest;
@@ -32,8 +33,9 @@ public class GetActivitiesTask extends AsyncTask<Void,Void,Boolean>{
             if (mResponse.getStatus().equals("ok")){
                 success = true;
             }
-        } catch (ETollIOException e) {
+        } catch (ETollIOException | ETollHttpException e) {
             mException = e;
+            e.printStackTrace();
         }
         return success;
     }
