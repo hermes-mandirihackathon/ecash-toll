@@ -40,6 +40,16 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordView = (EditText) findViewById(R.id.password);
         mErrorTextView = (TextView) findViewById(R.id.error);
 
+        //check if old successful value of msisdn and password exists
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+        String msisdn = sharedPref.getString("msisdn",null);
+        String credentials = sharedPref.getString("credentials",null);
+        if (msisdn != null && credentials != null){
+            mEmailView.setText(msisdn);
+            mPasswordView.setText(credentials);
+        }
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -75,9 +85,11 @@ public class LoginActivity extends AppCompatActivity {
     public class UserLoginTask extends LoginTask {
         Context mContext;
         ProgressDialog mProgressDialog;
+        String mCredentials;
 
         public UserLoginTask(Context context, ETollSyncRESTClient client, String uid, String msisdn, String credentials) {
             super(client, uid, msisdn, credentials);
+            mCredentials = credentials;
             mContext = context;
         }
 
@@ -99,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("token",mResponse.getToken());
                 editor.putString("msisdn", mResponse.getMsisdn());
+                editor.putString("password",mCredentials);
                 editor.apply();
                 Intent intent = new Intent(mContext,MainMenuActivity.class);
 //                Intent intent = new Intent(mContext,CreateVehicleActivity.class);
