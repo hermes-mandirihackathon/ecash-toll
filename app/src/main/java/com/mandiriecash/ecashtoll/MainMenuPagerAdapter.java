@@ -9,14 +9,14 @@ public class MainMenuPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
-    public static final int LOG_ACTIVITY = 0;
-    public static final int VEHICLE = 1;
+    public static final int HISTORY = 0;
+    public static final int PLAN = 1;
 
     @Override
     public Fragment getItem(int position) {
         Fragment fragment;
-        if (position == 0){
-            fragment = new LogActivityFragment();
+        if (position == PLAN){
+            fragment = new PlanFragment();
         } else {
             fragment = new VehicleFragment();
         }

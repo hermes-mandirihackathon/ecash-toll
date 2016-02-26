@@ -21,9 +21,11 @@ import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
 import com.mandiriecash.ecashtoll.services.async_tasks.BalanceInquiryTask;
 import com.mandiriecash.ecashtoll.services.models.LogActivity;
+import com.mandiriecash.ecashtoll.services.models.Plan;
 import com.mandiriecash.ecashtoll.services.models.Vehicle;
 
-public class MainMenuActivity extends AppCompatActivity implements VehicleFragment.OnListFragmentInteractionListener, LogActivityFragment.OnListFragmentInteractionListener{
+public class MainMenuActivity extends AppCompatActivity
+        implements VehicleFragment.OnListFragmentInteractionListener, LogActivityFragment.OnListFragmentInteractionListener,PlanFragment.OnListFragmentInteractionListener {
     public static final int CREATE_VEHICLE_ACTIVITY = 1;
     MainMenuPagerAdapter mMainMenuPagerAdapter;
     ViewPager mViewPager;
@@ -143,6 +145,11 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main_menu, menu);
         return true;
+    }
+
+    @Override
+    public void onListFragmentInteraction(Plan item) {
+        //TODO impl
     }
 
     private class MainMenuBalanceInquiryTask extends BalanceInquiryTask {
