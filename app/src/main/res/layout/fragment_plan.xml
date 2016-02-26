@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="318dp"
+            android:layout_width="282dp"
             android:layout_height="wrap_content"
             android:weightSum="1">
 
