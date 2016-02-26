@@ -7,6 +7,8 @@ public class LogActivity {
     int price;
     String vehicle_name;
     long timestamp;
+    String source_toll_name;
+    String dest_toll_name;
 
     public LogActivity(Activity activity,String vehicleName){
         setId(activity.getId());
@@ -62,5 +64,21 @@ public class LogActivity {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getSource_toll_name() {
+        return source_toll_name;
+    }
+
+    public void setSource_toll_name(String source_toll_name) {
+        this.source_toll_name = source_toll_name;
+    }
+
+    public String getDest_toll_name() {
+        return dest_toll_name;
+    }
+
+    public void setDest_toll_name(String dest_toll_name) {
+        this.dest_toll_name = dest_toll_name;
     }
 }

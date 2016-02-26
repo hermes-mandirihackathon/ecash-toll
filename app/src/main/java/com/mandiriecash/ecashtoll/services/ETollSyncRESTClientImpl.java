@@ -41,7 +41,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful())
                 return gson.fromJson(response.body().charStream(), LoginResponse.class);
-            else throw new ETollHttpException(response.code(),response.body().toString());
+            else throw new ETollHttpException(response.code(),response.body().string());
         } catch (IOException e) {
             throw new ETollIOException(e);
         }
@@ -59,7 +59,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
             if (response.isSuccessful()){
                 return gson.fromJson(response.body().charStream(),BalanceInquiryResponse.class);
             } else {
-                throw new ETollHttpException(response.code(),response.body().toString());
+                throw new ETollHttpException(response.code(),response.body().string());
             }
         } catch (IOException e) {
             throw new ETollIOException(e);
@@ -78,7 +78,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
             if (response.isSuccessful()){
                 return gson.fromJson(response.body().charStream(),GetActivitiesResponse.class);
             } else {
-                throw new ETollHttpException(response.code(),response.body().toString());
+                throw new ETollHttpException(response.code(),response.body().string());
             }
         } catch (IOException e){
             throw new ETollIOException(e);
@@ -101,7 +101,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
             if (response.isSuccessful()){
                 return gson.fromJson(response.body().charStream(),CreateActivityResponse.class);
             } else {
-                throw new ETollHttpException(response.code(),response.body().toString());
+                throw new ETollHttpException(response.code(),response.body().string());
             }
         } catch (IOException e) {
             throw new ETollIOException(e);
@@ -121,7 +121,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
             if (response.isSuccessful()){
                 return gson.fromJson(response.body().charStream(),GetVehiclesResponse.class);
             } else {
-                throw new ETollHttpException(response.code(),response.body().toString());
+                throw new ETollHttpException(response.code(),response.body().string());
             }
         } catch (IOException e) {
             throw new ETollIOException(e);

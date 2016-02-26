@@ -41,7 +41,8 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mVehicleName.setText(mValues.get(position).getVehicle_name());
-        String sourceDest = mValues.get(position).getSource_toll_id() + " - " +mValues.get(position).getDest_toll_id();
+//        String sourceDest = mValues.get(position).getSource_toll_id() + " - " +mValues.get(position).getDest_toll_id();
+        String sourceDest = mValues.get(position).getSource_toll_name() + " - " +mValues.get(position).getDest_toll_name();
         holder.mSourceDest.setText(sourceDest);
         holder.mPrice.setText(String.valueOf(mValues.get(position).getPrice()));
         holder.mTime.setText(String.valueOf(mValues.get(position).getTimestamp()));
