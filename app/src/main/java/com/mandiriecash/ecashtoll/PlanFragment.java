@@ -15,6 +15,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.services.ETollHttpException;
@@ -42,6 +44,7 @@ public class PlanFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private PlanRecyclerViewAdapter mPlanRecyclerViewAdapter;
+    private LinearLayout mProgressBarLayout;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -78,6 +81,7 @@ public class PlanFragment extends Fragment {
         if (view instanceof CoordinatorLayout) {
             final Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+            mProgressBarLayout = (LinearLayout) view.findViewById(R.id.bar);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -172,6 +176,7 @@ public class PlanFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            mProgressBarLayout.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -190,6 +195,7 @@ public class PlanFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean success) {
+            mProgressBarLayout.setVisibility(View.GONE);
             if (success){
                 mPlanRecyclerViewAdapter.setmValues(mResponse.getPlans());
                 mPlanRecyclerViewAdapter.notifyDataSetChanged();

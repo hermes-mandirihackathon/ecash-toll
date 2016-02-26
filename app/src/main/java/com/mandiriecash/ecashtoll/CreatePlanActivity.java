@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class CreatePlanActivity extends AppCompatActivity {
     Map<String,Integer> tollIds = new HashMap<>();
 
     String mMsisdn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,7 @@ public class CreatePlanActivity extends AppCompatActivity {
         Exception mException;
         CreatePlanResponse mResponse;
         CreatePlanRequest mRequest;
+        ProgressDialog mProgressDialog;
 
         public CreatePlanTask(Context context,ETollSyncRESTClient client,String msisdn,
                               int source_id,String source_name,int dest_id,String dest_name,int price){
@@ -119,6 +122,10 @@ public class CreatePlanActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(mContext);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Adding plan...");
+            mProgressDialog.show();
         }
 
         @Override
@@ -137,7 +144,9 @@ public class CreatePlanActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean success) {
+            mProgressDialog.dismiss();
             if (success){
+                Toast.makeText(mContext,"Plan added",Toast.LENGTH_LONG).show();
             } else {
                 if (mException != null) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
@@ -163,6 +172,7 @@ public class CreatePlanActivity extends AppCompatActivity {
         ETollSyncRESTClient mClient;
         Exception mException;
         GetTollsResponse mResponse;
+        ProgressDialog mProgressDialog;
 
         public GetTollsTask(Context context,ETollSyncRESTClient client){
             this.mContext = context;
@@ -171,6 +181,10 @@ public class CreatePlanActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(mContext);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Mengambil daftar tol");
+            mProgressDialog.show();
         }
 
         @Override
@@ -189,6 +203,7 @@ public class CreatePlanActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean success) {
+            mProgressDialog.dismiss();
             if (success){
                 List<Toll> tolls = mResponse.getTolls();
                 for(Toll toll:tolls){

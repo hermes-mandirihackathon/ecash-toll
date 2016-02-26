@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.services.ETollHttpException;
@@ -20,14 +22,10 @@ import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
 import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
 import com.mandiriecash.ecashtoll.services.models.History;
-import com.mandiriecash.ecashtoll.services.models.Plan;
 import com.mandiriecash.ecashtoll.services.requests.GetHistoryRequest;
-import com.mandiriecash.ecashtoll.services.requests.GetPlansRequest;
 import com.mandiriecash.ecashtoll.services.responses.GetHistoryResponse;
-import com.mandiriecash.ecashtoll.services.responses.GetPlansResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -43,6 +41,7 @@ public class HistoryFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private HistoryRecyclerViewAdapter mHistoryRecyclerViewAdapter;
+    LinearLayout mProgressBarLayout;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -79,6 +78,8 @@ public class HistoryFragment extends Fragment {
         if (view instanceof CoordinatorLayout) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+            mProgressBarLayout = (LinearLayout) view.findViewById(R.id.bar);
+
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -164,6 +165,7 @@ public class HistoryFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            mProgressBarLayout.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -182,6 +184,7 @@ public class HistoryFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean success) {
+            mProgressBarLayout.setVisibility(View.GONE);
             if (success){
                 mHistoryRecyclerViewAdapter.setmValues(mResponse.getHistories());
                 mHistoryRecyclerViewAdapter.notifyDataSetChanged();
