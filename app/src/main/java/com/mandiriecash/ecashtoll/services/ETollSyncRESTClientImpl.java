@@ -6,14 +6,20 @@ import com.google.gson.Gson;
 import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
 import com.mandiriecash.ecashtoll.services.requests.BalanceInquiryRequest;
 import com.mandiriecash.ecashtoll.services.requests.CreateActivityRequest;
+import com.mandiriecash.ecashtoll.services.requests.CreatePlanRequest;
 import com.mandiriecash.ecashtoll.services.requests.CreateVehicleRequest;
 import com.mandiriecash.ecashtoll.services.requests.GetActivitiesRequest;
+import com.mandiriecash.ecashtoll.services.requests.GetHistoryRequest;
+import com.mandiriecash.ecashtoll.services.requests.GetPlansRequest;
 import com.mandiriecash.ecashtoll.services.requests.GetVehiclesRequest;
 import com.mandiriecash.ecashtoll.services.requests.LoginRequest;
 import com.mandiriecash.ecashtoll.services.responses.BalanceInquiryResponse;
 import com.mandiriecash.ecashtoll.services.responses.CreateActivityResponse;
+import com.mandiriecash.ecashtoll.services.responses.CreatePlanResponse;
 import com.mandiriecash.ecashtoll.services.responses.CreateVehicleResponse;
 import com.mandiriecash.ecashtoll.services.responses.GetActivitiesResponse;
+import com.mandiriecash.ecashtoll.services.responses.GetHistoryResponse;
+import com.mandiriecash.ecashtoll.services.responses.GetPlansResponse;
 import com.mandiriecash.ecashtoll.services.responses.GetTollsResponse;
 import com.mandiriecash.ecashtoll.services.responses.GetVehiclesResponse;
 import com.mandiriecash.ecashtoll.services.responses.LoginResponse;
@@ -50,7 +56,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
 
     @Override
     public BalanceInquiryResponse balance(BalanceInquiryRequest balanceRequest) throws ETollIOException, ETollHttpException {
-        String url = urlFactory.balance(balanceRequest.getToken(),balanceRequest.getMsisdn());
+        String url = urlFactory.balance(balanceRequest.getToken(), balanceRequest.getMsisdn());
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -69,7 +75,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
 
     @Override
     public GetActivitiesResponse getActivities(GetActivitiesRequest getActivitiesRequest) throws ETollIOException, ETollHttpException {
-        String url = urlFactory.getActivities(getActivitiesRequest.getToken(),getActivitiesRequest.getMsisdn());
+        String url = urlFactory.getActivities(getActivitiesRequest.getToken(), getActivitiesRequest.getMsisdn());
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -89,8 +95,8 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
 
     @Override
     public CreateActivityResponse createActivity(CreateActivityRequest request) throws ETollIOException, ETollHttpException {
-        String url = urlFactory.createActivity(request.getMsisdn(),request.getToken(),request.getTimestamp(),request.getVehicle_id()
-                ,request.getSource_toll_id(),request.getDest_toll_id(),request.getPrice());
+        String url = urlFactory.createActivity(request.getMsisdn(), request.getToken(), request.getTimestamp(), request.getVehicle_id()
+                , request.getSource_toll_id(), request.getDest_toll_id(), request.getPrice());
 
         Request httpRequest = new Request.Builder()
                 .url(url)
@@ -111,7 +117,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
 
     @Override
     public GetVehiclesResponse getVehicles(GetVehiclesRequest request) throws ETollIOException, ETollHttpException {
-        String url = urlFactory.getVehicles(request.getToken(),request.getMsisdn());
+        String url = urlFactory.getVehicles(request.getToken(), request.getMsisdn());
         Request httpRequest = new Request.Builder()
                 .url(url)
                 .build();
@@ -131,7 +137,7 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
 
     @Override
     public CreateVehicleResponse createVehicle(CreateVehicleRequest request) throws ETollIOException,ETollHttpException {
-        String url = urlFactory.createVehicle(request.getToken(),request.getMsisdn(),request.getName(),request.getPlate_no());
+        String url = urlFactory.createVehicle(request.getToken(), request.getMsisdn(), request.getName(), request.getPlate_no());
         Request httpRequest = new Request.Builder()
                 .url(url)
                 .build();
@@ -159,6 +165,60 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
             Response response = client.newCall(httpRequest).execute();
             if (response.isSuccessful()){
                 return gson.fromJson(response.body().charStream(),GetTollsResponse.class);
+            } else throw new ETollHttpException(response.code(),response.body().string());
+        } catch (IOException e) {
+            throw new ETollIOException(e);
+        }
+    }
+
+    @Override
+    public GetPlansResponse getPlans(GetPlansRequest request) throws ETollHttpException, ETollIOException {
+        String url = urlFactory.getPlans(request.getMsisdn());
+        Request httpRequest = new Request.Builder()
+                .url(url)
+                .build();
+        Log.d(HTTP_REQUEST_TAG,url);
+
+        try {
+            Response response = client.newCall(httpRequest).execute();
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),GetPlansResponse.class);
+            } else throw new ETollHttpException(response.code(),response.body().string());
+        } catch (IOException e) {
+            throw new ETollIOException(e);
+        }
+    }
+
+    @Override
+    public GetHistoryResponse getHistory(GetHistoryRequest request) throws ETollHttpException, ETollIOException {
+        String url = urlFactory.getHistory(request.getMsisdn());
+        Request httpRequest = new Request.Builder()
+                .url(url)
+                .build();
+        Log.d(HTTP_REQUEST_TAG,url);
+
+        try {
+            Response response = client.newCall(httpRequest).execute();
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),GetHistoryResponse.class);
+            } else throw new ETollHttpException(response.code(),response.body().string());
+        } catch (IOException e) {
+            throw new ETollIOException(e);
+        }
+    }
+
+    public CreatePlanResponse createPlan(CreatePlanRequest request) throws ETollHttpException,ETollIOException {
+        String url = urlFactory.createPlan(request.getMsisdn(),request.getSource_id(),request.getDest_toll_id(),
+                request.getSource_name(),request.getDest_name(),request.getPrice());
+        Request httpRequest = new Request.Builder()
+                .url(url)
+                .build();
+        Log.d(HTTP_REQUEST_TAG,url);
+
+        try {
+            Response response = client.newCall(httpRequest).execute();
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),CreatePlanResponse.class);
             } else throw new ETollHttpException(response.code(),response.body().string());
         } catch (IOException e) {
             throw new ETollIOException(e);
