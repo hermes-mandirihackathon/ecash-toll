@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
     ETollSyncRESTClient mETollSyncRESTClient;
 
     TextView mBalanceTextView;
+    ProgressBar mProgressBar;
 
     private String mMsisdn;
     private String mToken;
@@ -42,6 +45,8 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
         mMainMenuPagerAdapter = new MainMenuPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainMenuPagerAdapter);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.bar);
 
         mBalanceTextView = (TextView) findViewById(R.id.balance);
 
@@ -152,7 +157,15 @@ public class MainMenuActivity extends AppCompatActivity implements VehicleFragme
         }
 
         @Override
+        protected void onPreExecute() {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mBalanceTextView.setVisibility(View.GONE);
+        }
+
+        @Override
         protected void onPostExecute(Boolean success) {
+            mProgressBar.setVisibility(View.GONE);
+            mBalanceTextView.setVisibility(View.VISIBLE);
             if (success){
                 mBalanceTextView.setText(mResponse.getAccountBalance());
             } else {

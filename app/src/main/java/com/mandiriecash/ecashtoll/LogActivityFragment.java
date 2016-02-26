@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
@@ -37,6 +39,8 @@ public class LogActivityFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
 
     private LogActivityViewAdapter mLogActivityViewAdapter;
+
+    private LinearLayout mProgressBarLinearLayout;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -68,11 +72,10 @@ public class LogActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+        if (recyclerView != null) {
+            Context context = recyclerView.getContext();
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -81,6 +84,9 @@ public class LogActivityFragment extends Fragment {
             mLogActivityViewAdapter = new LogActivityViewAdapter(new ArrayList<LogActivity>(), mListener);
             recyclerView.setAdapter(mLogActivityViewAdapter);
         }
+
+        mProgressBarLinearLayout = (LinearLayout) view.findViewById(R.id.bar);
+        mProgressBarLinearLayout.setVisibility(View.GONE);
         return view;
     }
 
@@ -141,7 +147,13 @@ public class LogActivityFragment extends Fragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            mProgressBarLinearLayout.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected void onPostExecute(Boolean success) {
+            mProgressBarLinearLayout.setVisibility(View.GONE);
             if (success) {
                 mViewAdapter.setmValues(mResponse.getActivities());
                 mViewAdapter.notifyDataSetChanged();

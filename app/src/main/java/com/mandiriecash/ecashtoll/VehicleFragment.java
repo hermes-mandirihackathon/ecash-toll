@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.services.models.Vehicle;
@@ -35,6 +36,8 @@ public class VehicleFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
 
     private VehicleRecyclerViewAdapter mVehicleRecyclerViewAdapter;
+
+    LinearLayout mProgressBarLinearLayout;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -79,6 +82,9 @@ public class VehicleFragment extends Fragment {
             mVehicleRecyclerViewAdapter = new VehicleRecyclerViewAdapter(new ArrayList<Vehicle>(), mListener, getContext());
             recyclerView.setAdapter(mVehicleRecyclerViewAdapter);
         }
+
+        mProgressBarLinearLayout = (LinearLayout) view.findViewById(R.id.bar);
+        mProgressBarLinearLayout.setVisibility(View.GONE);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +159,13 @@ public class VehicleFragment extends Fragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            mProgressBarLinearLayout.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected void onPostExecute(Boolean success) {
+            mProgressBarLinearLayout.setVisibility(View.GONE);
             if (success) {
                 mViewAdapter.setmValues(mResponse.getVehicles());
                 mViewAdapter.notifyDataSetChanged();
