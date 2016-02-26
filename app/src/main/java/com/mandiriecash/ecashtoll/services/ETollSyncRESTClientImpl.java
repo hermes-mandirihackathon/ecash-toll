@@ -14,6 +14,7 @@ import com.mandiriecash.ecashtoll.services.responses.BalanceInquiryResponse;
 import com.mandiriecash.ecashtoll.services.responses.CreateActivityResponse;
 import com.mandiriecash.ecashtoll.services.responses.CreateVehicleResponse;
 import com.mandiriecash.ecashtoll.services.responses.GetActivitiesResponse;
+import com.mandiriecash.ecashtoll.services.responses.GetTollsResponse;
 import com.mandiriecash.ecashtoll.services.responses.GetVehiclesResponse;
 import com.mandiriecash.ecashtoll.services.responses.LoginResponse;
 
@@ -145,4 +146,24 @@ public class ETollSyncRESTClientImpl implements ETollSyncRESTClient {
             throw new ETollIOException(e);
         }
     }
+
+    @Override
+    public GetTollsResponse getTolls() throws ETollHttpException, ETollIOException {
+        String url = urlFactory.getTolls();
+        Request httpRequest = new Request.Builder()
+                .url(url)
+                .build();
+        Log.d(HTTP_REQUEST_TAG,url);
+
+        try {
+            Response response = client.newCall(httpRequest).execute();
+            if (response.isSuccessful()){
+                return gson.fromJson(response.body().charStream(),GetTollsResponse.class);
+            } else throw new ETollHttpException(response.code(),response.body().string());
+        } catch (IOException e) {
+            throw new ETollIOException(e);
+        }
+    }
+
+
 }

@@ -3,6 +3,11 @@ package com.mandiriecash.ecashtoll.services;
 public class ETollURLFactory {
     public static final String BASE_URL = "http://etoll-api.mybluemix.net";
 //    public static final String BASE_URL = "http://192.168.56.1:8080";
+
+    public String getTolls(){
+        return String.format("%s/%s/",BASE_URL,"tolls");
+    }
+
     /**
      * @param uid device id
      * @param msisdn phone number
