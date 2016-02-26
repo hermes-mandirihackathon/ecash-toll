@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.mandiriecash.ecashtoll.LogActivityFragment.OnListFragmentInteractionListener;
 import com.mandiriecash.ecashtoll.services.models.LogActivity;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,8 +47,11 @@ public class LogActivityViewAdapter extends RecyclerView.Adapter<LogActivityView
         String sourceDest = mValues.get(position).getSource_toll_name() + " - " +mValues.get(position).getDest_toll_name();
         holder.mSourceDest.setText(sourceDest);
         holder.mPrice.setText(String.valueOf(mValues.get(position).getPrice()));
-        holder.mTime.setText(String.valueOf(mValues.get(position).getTimestamp()));
-
+//        holder.mTime.setText(String.valueOf(mValues.get(position).getTimestamp()));
+        Calendar calendar = Calendar.getInstance(); calendar.setTimeInMillis(mValues.get(position).getTimestamp());
+        holder.mTime.setText(String.format("%d-%d-%d %d:%d",
+                calendar.get(Calendar.DAY_OF_MONTH),calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)));
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
