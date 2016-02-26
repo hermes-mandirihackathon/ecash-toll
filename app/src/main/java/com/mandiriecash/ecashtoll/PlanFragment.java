@@ -1,7 +1,10 @@
 package com.mandiriecash.ecashtoll;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,9 +65,9 @@ public class PlanFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_plan_list, container, false);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+        if (view instanceof CoordinatorLayout) {
+            final Context context = view.getContext();
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -72,6 +75,16 @@ public class PlanFragment extends Fragment {
             }
             mPlanRecyclerViewAdapter = new PlanRecyclerViewAdapter(new ArrayList<Plan>(), mListener);
             recyclerView.setAdapter(mPlanRecyclerViewAdapter);
+
+            //set button listener
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context,CreatePlanActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
         return view;
     }
