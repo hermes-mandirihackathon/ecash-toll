@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Add Vehicle"
+            android:text="Tambah rencana"
             android:textStyle="bold" />
 
     </LinearLayout>

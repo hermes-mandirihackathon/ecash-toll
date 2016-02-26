@@ -60,4 +60,17 @@ public class ETollURLFactory {
     public String createVehicle(String token,String msisdn,String name,String plateNo){
         return String.format("%s/%s?token=%s&msisdn=%s&name=%s&plate_no=%s",BASE_URL,"vehicles/create",token,msisdn,name,plateNo);
     }
+
+    public String getPlans(String msisdn){
+        return String.format("%s/%s?msisdn=%s",BASE_URL,"plans/",msisdn);
+    }
+
+    public String getHistory(String msisdn){
+        return String.format("%s/%s?msisdn=%s",BASE_URL,"histories/",msisdn);
+    }
+
+    public String createPlan(String msisdn,int sourceTollId,int destTollId,String source_name,String dest_name,int price){
+        return String.format("%s/%s?msisdn=%s&source_id=%s&dest_id=%s&source_name=%s&dest_name=%s&price=%d",
+                BASE_URL,"plans/create",msisdn,sourceTollId,destTollId,source_name,dest_name,price);
+    }
 }

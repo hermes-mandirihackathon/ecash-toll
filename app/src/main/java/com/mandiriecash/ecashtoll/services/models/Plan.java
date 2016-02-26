@@ -8,8 +8,16 @@ public class Plan {
     private String source_name;
     private String dest_name;
     private int dest_id;
-    private int user_id;
+    String msisdn;
     private int price;
+
+    public String getMsisdn() {
+        return msisdn;
+    }
+
+    public void setMsisdn(String msisdn) {
+        this.msisdn = msisdn;
+    }
 
     public int getSource_id() {
         return source_id;
@@ -41,14 +49,6 @@ public class Plan {
 
     public void setDest_id(int dest_id) {
         this.dest_id = dest_id;
-    }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
     }
 
     public int getPrice() {

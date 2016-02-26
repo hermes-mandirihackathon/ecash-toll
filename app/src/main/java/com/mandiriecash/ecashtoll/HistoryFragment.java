@@ -1,18 +1,30 @@
 package com.mandiriecash.ecashtoll;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.mandiriecash.ecashtoll.services.ETollHttpException;
+import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
+import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
+import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
 import com.mandiriecash.ecashtoll.services.models.History;
 import com.mandiriecash.ecashtoll.services.models.Plan;
+import com.mandiriecash.ecashtoll.services.requests.GetHistoryRequest;
+import com.mandiriecash.ecashtoll.services.requests.GetPlansRequest;
+import com.mandiriecash.ecashtoll.services.responses.GetHistoryResponse;
+import com.mandiriecash.ecashtoll.services.responses.GetPlansResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,17 +130,78 @@ public class HistoryFragment extends Fragment {
     }
 
     void fetchData(){
-        List<History> histories = new ArrayList<>();
-        History history = new History();
-        history.setDest_id(1);
-        history.setSource_id(1);
-        history.setDest_name("woi");
-        history.setSource_name("woi");
-        history.setPrice(12345);
-        for(int i = 0; i < 5; i++){
-            histories.add(history);
+        String msisdn = ((MainMenuActivity) getActivity()).getmMsisdn();
+        GetHistoryTask task = new GetHistoryTask(getActivity(),new ETollSyncRESTClientImpl(),msisdn);
+        task.execute();
+
+//        List<History> histories = new ArrayList<>();
+//        History history = new History();
+//        history.setDest_id(1);
+//        history.setSource_id(1);
+//        history.setDest_name("woi");
+//        history.setSource_name("woi");
+//        history.setPrice(12345);
+//        for(int i = 0; i < 5; i++){
+//            histories.add(history);
+//        }
+//        mHistoryRecyclerViewAdapter.setmValues(histories);
+//        mHistoryRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    class GetHistoryTask extends AsyncTask<Void,Void,Boolean>
+    {
+        Context mContext;
+        ETollSyncRESTClient mClient;
+        Exception mException;
+        GetHistoryResponse mResponse;
+        GetHistoryRequest mRequest;
+
+        public GetHistoryTask(Context context,ETollSyncRESTClient client,String msisdn){
+            this.mContext = context;
+            this.mClient = client;
+            mRequest = (new GetHistoryRequest.Builder()).msisdn(msisdn).build();
         }
-        mHistoryRecyclerViewAdapter.setmValues(histories);
-        mHistoryRecyclerViewAdapter.notifyDataSetChanged();
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Boolean success = false;
+            try {
+                mResponse = mClient.getHistory(mRequest);
+                if (mResponse.getStatus().equalsIgnoreCase("ok")){
+                    success = true;
+                }
+            } catch (ETollHttpException | ETollIOException e) {
+                mException = e;
+            }
+            return success;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success){
+                mHistoryRecyclerViewAdapter.setmValues(mResponse.getHistories());
+                mHistoryRecyclerViewAdapter.notifyDataSetChanged();
+            } else {
+                if (mException != null) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+                    alertDialog.setTitle("Error");
+                    alertDialog.setMessage(mException.getMessage());
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Close", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                } else {
+                    Toast.makeText(mContext, mResponse.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+
     }
 }
