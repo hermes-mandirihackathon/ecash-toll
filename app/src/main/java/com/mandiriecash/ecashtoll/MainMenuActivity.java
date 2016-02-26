@@ -20,12 +20,13 @@ import android.widget.Toast;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClient;
 import com.mandiriecash.ecashtoll.services.ETollSyncRESTClientImpl;
 import com.mandiriecash.ecashtoll.services.async_tasks.BalanceInquiryTask;
+import com.mandiriecash.ecashtoll.services.models.History;
 import com.mandiriecash.ecashtoll.services.models.LogActivity;
 import com.mandiriecash.ecashtoll.services.models.Plan;
 import com.mandiriecash.ecashtoll.services.models.Vehicle;
 
 public class MainMenuActivity extends AppCompatActivity
-        implements VehicleFragment.OnListFragmentInteractionListener, LogActivityFragment.OnListFragmentInteractionListener,PlanFragment.OnListFragmentInteractionListener {
+        implements PlanFragment.OnListFragmentInteractionListener,HistoryFragment.OnListFragmentInteractionListener {
     public static final int CREATE_VEHICLE_ACTIVITY = 1;
     MainMenuPagerAdapter mMainMenuPagerAdapter;
     ViewPager mViewPager;
@@ -53,8 +54,8 @@ public class MainMenuActivity extends AppCompatActivity
         mBalanceTextView = (TextView) findViewById(R.id.balance);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Log"));
-        tabLayout.addTab(tabLayout.newTab().setText("Kendaraan"));
+        tabLayout.addTab(tabLayout.newTab().setText("Plan"));
+        tabLayout.addTab(tabLayout.newTab().setText("History"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -131,16 +132,6 @@ public class MainMenuActivity extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(Vehicle item) {
-        //TODO impl
-    }
-
-    @Override
-    public void onListFragmentInteraction(LogActivity item) {
-        //TODO impl
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main_menu, menu);
@@ -150,6 +141,11 @@ public class MainMenuActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(Plan item) {
         //TODO impl
+    }
+
+    @Override
+    public void onListFragmentInteraction(History item) {
+
     }
 
     private class MainMenuBalanceInquiryTask extends BalanceInquiryTask {

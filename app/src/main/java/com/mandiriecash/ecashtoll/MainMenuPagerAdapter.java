@@ -9,8 +9,8 @@ public class MainMenuPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
-    public static final int HISTORY = 0;
-    public static final int PLAN = 1;
+    public static final int PLAN = 0;
+    public static final int HISTORY = 1;
 
     @Override
     public Fragment getItem(int position) {
@@ -18,7 +18,7 @@ public class MainMenuPagerAdapter extends FragmentPagerAdapter {
         if (position == PLAN){
             fragment = new PlanFragment();
         } else {
-            fragment = new VehicleFragment();
+            fragment = new HistoryFragment();
         }
         return fragment;
     }
