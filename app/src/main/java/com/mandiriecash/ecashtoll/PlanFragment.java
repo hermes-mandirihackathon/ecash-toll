@@ -87,7 +87,7 @@ public class PlanFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mPlanRecyclerViewAdapter = new PlanRecyclerViewAdapter(new ArrayList<Plan>(), mListener);
+            mPlanRecyclerViewAdapter = new PlanRecyclerViewAdapter(getActivity(),new ArrayList<Plan>(), mListener);
             recyclerView.setAdapter(mPlanRecyclerViewAdapter);
 
             //set button listener

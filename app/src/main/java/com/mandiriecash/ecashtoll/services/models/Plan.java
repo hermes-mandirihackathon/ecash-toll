@@ -8,8 +8,17 @@ public class Plan {
     private String source_name;
     private String dest_name;
     private int dest_id;
+    private int id;
     String msisdn;
     private int price;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getMsisdn() {
         return msisdn;

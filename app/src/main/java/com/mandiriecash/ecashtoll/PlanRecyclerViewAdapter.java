@@ -1,9 +1,12 @@
 package com.mandiriecash.ecashtoll;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mandiriecash.ecashtoll.PlanFragment.OnListFragmentInteractionListener;
@@ -12,12 +15,14 @@ import com.mandiriecash.ecashtoll.services.models.Plan;
 import java.util.List;
 public class PlanRecyclerViewAdapter extends RecyclerView.Adapter<PlanRecyclerViewAdapter.ViewHolder> {
 
+    private Context mContext;
     private List<Plan> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public PlanRecyclerViewAdapter(List<Plan> items, OnListFragmentInteractionListener listener) {
+    public PlanRecyclerViewAdapter(Context context,List<Plan> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+        mContext = context;
     }
 
     @Override
@@ -51,11 +56,12 @@ public class PlanRecyclerViewAdapter extends RecyclerView.Adapter<PlanRecyclerVi
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final View mView;
         public final TextView mSourceView;
         public final TextView mDestView;
         public final TextView mPriceView;
+        public final ImageButton mImageButton;
         public Plan mItem;
 
         public ViewHolder(View view) {
@@ -64,8 +70,14 @@ public class PlanRecyclerViewAdapter extends RecyclerView.Adapter<PlanRecyclerVi
             mSourceView = (TextView) view.findViewById(R.id.source);
             mDestView = (TextView) view.findViewById(R.id.dest);
             mPriceView = (TextView) view.findViewById(R.id.price);
+            mImageButton = (ImageButton) view.findViewById(R.id.imageButton);
+            mImageButton.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            startBarcodeActivity(String.valueOf(mItem.getId()));
+        }
     }
 
     public List<Plan> getmValues() {
@@ -74,5 +86,11 @@ public class PlanRecyclerViewAdapter extends RecyclerView.Adapter<PlanRecyclerVi
 
     public void setmValues(List<Plan> mValues) {
         this.mValues = mValues;
+    }
+
+    public void startBarcodeActivity(String code){
+        Intent intent = new Intent(mContext,BarcodeActivity.class);
+        intent.putExtra("code",code);
+        mContext.startActivity(intent);
     }
 }
