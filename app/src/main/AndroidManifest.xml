@@ -41,8 +41,7 @@
         <activity
             android:name=".CreatePlanActivity"
             android:label="@string/title_activity_create_plan"
-            android:parentActivityName=".MainMenuActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".MainMenuActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -60,7 +59,11 @@
         <activity
             android:name=".BarcodeActivity"
             android:label="@string/title_activity_barcode"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".MainMenuActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainMenuActivity" />
         </activity>
     </application>
 

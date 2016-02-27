@@ -1,5 +1,6 @@
 package com.mandiriecash.ecashtoll;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,7 +28,7 @@ import com.google.zxing.common.BitMatrix;
 
 import org.w3c.dom.Text;
 
-public class BarcodeActivity extends Activity {
+public class BarcodeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,11 @@ public class BarcodeActivity extends Activity {
             e.printStackTrace();
         }
         textView.setText(barcode_data);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     /**************************************************************
