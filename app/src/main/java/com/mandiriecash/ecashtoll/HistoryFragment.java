@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -67,6 +68,8 @@ public class HistoryFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        //biar bisa onoptionsitemselected
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -114,6 +117,7 @@ public class HistoryFragment extends Fragment {
         super.onResume();
         fetchData();
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

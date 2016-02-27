@@ -4,6 +4,12 @@
     tools:context="com.mandiriecash.ecashtoll.MainMenuActivity">
 
     <item
+        android:id="@+id/action_refresh"
+        android:title="Refresh"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_rotate"/>
+
+    <item
         android:id="@+id/action_logout"
         android:title="Logout"
         app:showAsAction="never"/>
