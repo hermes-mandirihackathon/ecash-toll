@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mandiriecash.ecashtoll.services.ETollHttpException;
@@ -26,6 +27,8 @@ import com.mandiriecash.ecashtoll.services.exceptions.ETollIOException;
 import com.mandiriecash.ecashtoll.services.models.Plan;
 import com.mandiriecash.ecashtoll.services.requests.GetPlansRequest;
 import com.mandiriecash.ecashtoll.services.responses.GetPlansResponse;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,8 @@ public class PlanFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private PlanRecyclerViewAdapter mPlanRecyclerViewAdapter;
     private LinearLayout mProgressBarLayout;
+
+    private TextView mBalanceNeedView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -82,6 +87,7 @@ public class PlanFragment extends Fragment {
             final Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
             mProgressBarLayout = (LinearLayout) view.findViewById(R.id.bar);
+            mBalanceNeedView = (TextView) view.findViewById(R.id.balanceNeed);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -199,6 +205,7 @@ public class PlanFragment extends Fragment {
             if (success){
                 mPlanRecyclerViewAdapter.setmValues(mResponse.getPlans());
                 mPlanRecyclerViewAdapter.notifyDataSetChanged();
+                updateBalanceNeed();
             } else {
                 if (mException != null) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
@@ -217,5 +224,12 @@ public class PlanFragment extends Fragment {
             }
         }
 
+    }
+
+    void updateBalanceNeed(){
+        List<Plan> plans = mPlanRecyclerViewAdapter.getmValues();
+        int value = 0;
+        for(Plan plan:plans) value += plan.getPrice();
+        mBalanceNeedView.setText(String.valueOf(value));
     }
 }
