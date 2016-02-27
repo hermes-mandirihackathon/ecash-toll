@@ -230,6 +230,6 @@ public class PlanFragment extends Fragment {
         List<Plan> plans = mPlanRecyclerViewAdapter.getmValues();
         int value = 0;
         for(Plan plan:plans) value += plan.getPrice();
-        mBalanceNeedView.setText(String.valueOf(value));
+        mBalanceNeedView.setText("Rp"+String.valueOf(value)+",-");
     }
 }

@@ -35,7 +35,7 @@ public class PlanRecyclerViewAdapter extends RecyclerView.Adapter<PlanRecyclerVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mPriceView.setText(String.valueOf(mValues.get(position).getPrice()));
+        holder.mPriceView.setText("Rp"+String.valueOf(mValues.get(position).getPrice())+",-");
         holder.mDestView.setText(mValues.get(position).getDest_name());
         holder.mSourceView.setText(mValues.get(position).getSource_name());
 
