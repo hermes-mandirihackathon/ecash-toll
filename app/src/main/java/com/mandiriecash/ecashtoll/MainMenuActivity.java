@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -145,6 +146,24 @@ public class MainMenuActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(History item) {
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case (R.id.action_refresh) :
+                //yes this is hack
+                Intent intent = new Intent(this,MainMenuActivity.class);
+                finish();
+                startActivity(intent);
+                break;
+        };
+        //false, biar bisa diextend ke history
+        return false;
+    }
+
+    void refreshData(){
 
     }
 
