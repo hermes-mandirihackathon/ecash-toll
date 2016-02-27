@@ -7,6 +7,7 @@ public class History {
     private int dest_id;
     private int user_id;
     private int price;
+    private long timestamp;
 
     public int getSource_id() {
         return source_id;
@@ -54,5 +55,13 @@ public class History {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

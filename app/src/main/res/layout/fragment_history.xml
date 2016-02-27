@@ -52,7 +52,10 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:text="Rp13.500,-"
                 android:textSize="18dp"
-                android:textColor="#376fa8" />
+                android:textColor="#376fa8"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:paddingRight="50dp" />
 
         </LinearLayout>
 
@@ -62,7 +65,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
             android:id="@+id/timestamp"
-            android:layout_marginLeft="15dp" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="-10dp" />
 
     </LinearLayout>
 

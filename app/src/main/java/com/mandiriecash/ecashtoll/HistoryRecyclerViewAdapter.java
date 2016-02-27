@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.mandiriecash.ecashtoll.HistoryFragment.OnListFragmentInteractionListener;
 import com.mandiriecash.ecashtoll.services.models.History;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.ViewHolder> {
@@ -31,9 +32,15 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mPriceView.setText(String.valueOf(mValues.get(position).getPrice()));
+        holder.mPriceView.setText("Rp"+String.valueOf(mValues.get(position).getPrice()));
         holder.mDestView.setText(mValues.get(position).getDest_name());
         holder.mSourceView.setText(mValues.get(position).getSource_name());
+
+        //TODO change
+        Calendar calendar = Calendar.getInstance(); calendar.setTimeInMillis(mValues.get(position).getTimestamp());
+        holder.mTimestampView.setText(String.format("%d-%d-%d %d:%d",
+                calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
